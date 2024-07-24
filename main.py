@@ -17,16 +17,23 @@ command = 'nodeta' # комманда, какое действие выполн�
 with urllib.request.urlopen(url) as u:
     data = dict(json.load(u))
 
-
 # получаем  данные только для Прокси
 for proxy in data["list"]:
     proxy_list.append(data["list"][proxy])
 
 
-def select_proxy():
+def show_proxy_list(proxylist):
+    print("Список доступных Прокси:")
+    idx = 1
+    for prx in proxylist:
+        print(f"{idx}: IP:{prx['ip']}  HOST:{prx['host']} PORT:{prx['port']} USER:{prx['user']} PASS:{prx['pass']} ТИП:{prx['type']} IPv:{prx['version']} ДЕЙСТВУЕТ_ДО:{prx['date_end']}")
+        idx = idx + 1
+
+
+def select_proxy(proxylist):
     print("Выберите Прокси")
     idx = 1
-    for prx in proxy_list:
+    for prx in proxylist:
         print(
             f"{idx}: IP:{prx['ip']} HOST:{prx['host']} PORT:{prx['port']} USER:{prx['user']} PASS:{prx['pass']} ТИП:{prx['type']} IPv:{prx['version']} ДЕЙСТВУЕТ_ДО:{prx['date_end']}")
         idx = idx + 1
@@ -40,3 +47,13 @@ def cange_type(api_key, ids, proxy_type="https"):
     with urllib.request.urlopen(req) as u:
         d = json.load(u)
         print(d)
+
+
+while command != "e":
+    print(f"\nproxy6.net\n1: Показать список доступных Прокси.\ne: Выход.")
+    command = input("введите команду :>")
+    if command == "1":
+        show_proxy_list(proxy_list)
+
+
+
