@@ -17,10 +17,21 @@ command = 'nodeta' # комманда, какое действие выполн�
 with urllib.request.urlopen(url) as u:
     data = dict(json.load(u))
 
-# получаем  данные только для Прокси
+# получаем  данные только для Прокси, записываем в список
 for proxy in data["list"]:
     proxy_list.append(data["list"][proxy])
 
+
+#Обновить список прокси
+def update_proxy_list():
+    data = dict();
+    proxy_list.clear()
+    # считать все данные данные
+    with urllib.request.urlopen(url) as u:
+        data = dict(json.load(u))
+    # получаем  данные только для Прокси, записываем в список
+    for proxy in data["list"]:
+        proxy_list.append(data["list"][proxy])
 
 def show_proxy_list(proxylist):
     print("Список доступных Прокси:")
@@ -40,20 +51,34 @@ def select_proxy(proxylist):
     print("Назад: 0")
     return int(input("Введите номер:> "))
 
-def cange_type(api_key, ids, proxy_type="https"):
+def change_type(api_key, ids, proxy_type="https"):
     # запрос на изменение Типа Прокси Socks/HTTPS
     # proxy_type = "https" # "https" / "socks"
     req = f"https://proxy6.net/api/{api_key}/settype?ids={ids}&type={proxy_type}"
     with urllib.request.urlopen(req) as u:
         d = json.load(u)
-        print(d)
+        # print(d)
+    update_proxy_list()
 
 
 while command != "e":
-    print(f"\nproxy6.net\n1: Показать список доступных Прокси.\ne: Выход.")
+    print(f"\nproxy6.net\n1: Показать список доступных Прокси.\n2: Изменить тип Прокси\ne: Выход.")
     command = input("введите команду :>")
     if command == "1":
         show_proxy_list(proxy_list)
+    if command == "2":
+        numb = int(input("введите номер Прокси :>"))
+        if numb > len(proxy_list):
+            print("[!]_WARNING: Некорректный номер Прокси!")
+        else:
+            if(proxy_list[numb-1]['type'] == "http"):
+                change_type(api_key, proxy_list[numb-1]['id'], "socks")
+            elif(proxy_list[numb-1]['type'] == "socks"):
+                change_type(api_key, proxy_list[numb - 1]['id'], "http1")
+            else:
+                change_type(api_key, proxy_list[numb - 1]['id'], "http")
+            print("[INFO]: Тип Проксти успешно изменён.")
+
 
 
 
