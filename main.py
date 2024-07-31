@@ -74,7 +74,7 @@ while command != "e":
             if(proxy_list[numb-1]['type'] == "http"):
                 change_type(api_key, proxy_list[numb-1]['id'], "socks")
             elif(proxy_list[numb-1]['type'] == "socks"):
-                change_type(api_key, proxy_list[numb - 1]['id'], "http1")
+                change_type(api_key, proxy_list[numb - 1]['id'], "http")
             else:
                 change_type(api_key, proxy_list[numb - 1]['id'], "http")
             print("[INFO]: Тип Проксти успешно изменён.")
